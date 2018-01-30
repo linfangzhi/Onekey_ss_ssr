@@ -38,8 +38,7 @@ def get_host_ip():
 
 
 def make_config_file():
-    content1 = '''API_INTERFACE = 'mudbjson'\nUPDATE_TIME= 60\n
-    '''
+    content1 = 'API_INTERFACE = \'mudbjson\'\nUPDATE_TIME= 6\n'
     content2 = 'SERVER_PUB_ADDR = \'{}\''.format(get_host_ip())
     content3 = '''\nMUDB_FILE = 'mudb.json'\nMYSQL_CONFIG = 'usermysql.json'\nMUAPI_CONFIG = 'usermuapi.json'
     '''
