@@ -95,7 +95,9 @@ for i in range(int(a[0]), int(a[-1])):
     os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
-with open('/etc/rc.d/rc/local','a')as file:
+os.system('chmod +x /etc/rc.d/rc.local')
+os.system('chmod +x /root/shadowsocksr/run.sh')
+with open('/etc/rc.d/rc.local','a')as file:
     # 开机自启
     conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/shadowsocksr/run.sh'.format(key=key)
     file.write(conten01)
