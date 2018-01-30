@@ -3,7 +3,8 @@
 ## 只供学习用途，请遵守中华人民共和国法律！报道出了偏差，与本人无关！
 ## 相关法律资料链接，请遵守。
 ![](https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/crop%3D0%2C92%2C800%2C528%3Bc0%3Dbaike92%2C5%2C5%2C92%2C30/sign=68cbbe45b8fb43160e50203a1d946a1a/f7246b600c338744be5ef1f25b0fd9f9d62aa0a1.jpg)
-[《中华人们共和国网络安全法》](http://www.law-lib.com/law/law_view.asp?id=547569)
+
+## [《中华人们共和国网络安全法》](http://www.law-lib.com/law/law_view.asp?id=547569)
 
 ## 特点
 * 操作简单
