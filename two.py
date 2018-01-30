@@ -20,8 +20,10 @@ print('安装SS')
 os.system('pip install shadowsocks')
 print('安装SSR')
 os.chdir('/root')
+# 这里要注意改变工作路径
 os.system('git clone -b manyuser https://github.com/Ssrbackup/shadowsocksr.git')
 os.chdir('/root/shadowsocksr')
+# 这里要注意改变工作路径
 os.system('bash initcfg.sh')
 
 
@@ -49,7 +51,7 @@ def make_config_file():
 
 
 make_config_file()
-os.system('python ./shadowsocksr/mujson_mgr.py -a -p 8848 -k 3141592654')
+os.system('python ./mujson_mgr.py -a -p 8848 -k 3141592654')
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
 
 for i in range(int(a[0]), int(a[-1])):
@@ -59,3 +61,4 @@ os.system('firewall-cmd --reload')
 os.chdir('/root')
 os.system(
     'wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh')
+
