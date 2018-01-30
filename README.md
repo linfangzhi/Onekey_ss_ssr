@@ -1,4 +1,4 @@
-# vultr-onekey-ss-ssr vultr 一键安装脚本
+# vultr 酸酸乳 一键安装脚本
 ## ONLY for Academic learning！！！
 ## 只供学习用途，请遵守中华人民共和国法律！报道出了偏差，与本人无关！
 ## 相关法律资料链接，请遵守。
