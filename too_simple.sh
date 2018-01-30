@@ -173,8 +173,8 @@ install_config() {
 }
 
 reboot_os() {
-    echo
-    echo -e "${green}Info:${plain} The system needs to reboot."
+    clear
+    echo -e "${green}Info:${plain} .Everything is done!"
     read -p "Do you want to restart system? [y/n]" is_reboot
     if [[ ${is_reboot} == "y" || ${is_reboot} == "Y" ]]; then
         reboot
@@ -193,7 +193,6 @@ install_bbr() {
     fi
     check_kernel_version
     if [ $? -eq 0 ]; then
-        echo
         echo -e "${green}Info:${plain} Your kernel version is greater than 4.9, directly setting TCP BBR..."
         sysctl_config
         echo -e "${green}Info:${plain} Setting TCP BBR completed..."

@@ -57,7 +57,6 @@ for i in range(int(a[0]), int(a[-1])):
     os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
-os.chdir('/root')
-os.system(
-    'wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh')
+os.chdir('/root/vultr-onekey-ss-ssr')
+os.system('chmod +x ./too_simple.sh && ./too_simple.sh')
 
