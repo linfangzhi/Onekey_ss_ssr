@@ -5,13 +5,51 @@
 
 import os
 import socket
-
-print("vultr 搭建专用 木木小方方 2018-01-30")
-print("要使用root权限")
-
-a = input('输入端口范围port')
-a = a.split()
-key = input('输入通用密码')
+import time
+os.system('clear')
+print('''
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @                                     @
+    @   vultr 搭建专用 木木小方方 2018-01-30  @
+    @                                     @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @                                     @
+    @声明:                                 @
+    @   本脚本仅供学习，以及在不违反中华人民共和国 @
+    @ 法律下使用，切勿违反中华人民共和国法律。     @
+    @                                     @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @ ShadowSocks配置（备用，一般不用）        @
+    @    加密方式    aes-256-cfb            @
+    @       端口    8842                   @
+    @-------------------------------------@
+    @ ShadowSocksR配置                     @
+    @       协议    auth_aes128_md5        @
+    @    加密方式    aes-128-ctr            @
+    @    混淆方式    tls1.2_ticket_auth     @
+    @       端口    自行设置                 @
+    @-------------------------------------@
+    @将会安装：                             @
+    @      @ ShadowSocks  (python版)     。@
+    @      @ ShadowSocksR (python版）      @
+    @      @ Google BBR 加速               @
+    @-------------------------------------@
+    @注意事项:                              @
+    @      端口要用空格分开  如:233 666       @
+    @      有时候需要重启一遍服务器才能完成加速安装@
+    @      请耐心等待，后按Y重启               @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    ''')
+while 1:
+    a = input('输入端口范围port\n')
+    a = a.split()
+    if int(a[0])>int(a[-1]):
+        print('端口输入错误！')
+    else:
+        break
+key = input('输入通用密码\n')
+print('请牢记密码，安装程序3秒后开始')
+time.sleep(3)
 os.system('yum -y update')
 print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
@@ -57,6 +95,10 @@ for i in range(int(a[0]), int(a[-1])):
     os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
+with open('/etc/rc.d/rc/local','a')as file:
+    # 开机自启
+    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n'.format(key=key)
+    conten02 = '/root/shadowsocksr/run.sh'
+    file.write(conten01+conten02)
 os.chdir('/root/vultr-onekey-ss-ssr')
 os.system('chmod +x ./too_simple.sh && ./too_simple.sh')
-
