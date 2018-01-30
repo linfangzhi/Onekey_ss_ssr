@@ -11,6 +11,7 @@ print("要使用root权限")
 
 a = input('输入端口范围port')
 a = a.split()
+key = input('输入通用密码')
 os.system('yum -y update')
 print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
@@ -49,11 +50,11 @@ def make_config_file():
 
 
 make_config_file()
-os.system('python ./mujson_mgr.py -a -p 8848 -k 3141592654')
+os.system('python ./mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
 
 for i in range(int(a[0]), int(a[-1])):
-    os.system('python mujson_mgr.py -a -p {} -k 3141592654'.format(i))
+    os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
 os.chdir('/root')
