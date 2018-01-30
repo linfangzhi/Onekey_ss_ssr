@@ -97,8 +97,7 @@ for i in range(int(a[0]), int(a[-1])):
 os.system('firewall-cmd --reload')
 with open('/etc/rc.d/rc/local','a')as file:
     # 开机自启
-    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n'.format(key=key)
-    conten02 = '/root/shadowsocksr/run.sh'
-    file.write(conten01+conten02)
+    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/shadowsocksr/run.sh'.format(key=key)
+    file.write(conten01)
 os.chdir('/root/vultr-onekey-ss-ssr')
 os.system('chmod +x ./too_simple.sh && ./too_simple.sh')
