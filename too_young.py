@@ -90,7 +90,7 @@ def make_config_file():
 make_config_file()
 os.system('python ./mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
-os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent')
+os.system('firewall-cmd --zone=public --add-port=8842/tcp --permanent')
 for i in range(int(a[0]), int(a[-1])):
     os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
