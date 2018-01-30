@@ -14,19 +14,19 @@
 * 请使用root用户登录
 ## 使用说明
 第一步 使用ssh链接主机
-> ssh root@你的IP
+'ssh root@你的IP'
 
 第二步 安装git
-> yum -y install git
+`yum -y install git`
 
 第三步 克隆项目
-> git clone https://github.com/linfangzhi/vultr-onekey-ss-ssr
+`git clone https://github.com/linfangzhi/vultr-onekey-ss-ssr`
 
 第四步 进入vultr-onekey-ss-ssr目录
-> cd vultr-onekey-ss-ssr
+`cd vultr-onekey-ss-ssr`
 
-第吴步 运行命令
-> python onekey.py
+第五步 运行命令
+`python onekey.py`
 
 第六步 设置密码和端口
 
