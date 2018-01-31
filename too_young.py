@@ -32,7 +32,8 @@ print('''
     @注意事项:                              
     @      端口要用空格分开  如:233 666       
     @      有时候需要重启一遍服务器才能完成加速安装
-    @      请耐心等待，后按Y重启               
+    @      请耐心等待，最后按Y重启，过一分钟之后就能用啦！
+    @             
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     ''')
 while 1:
@@ -43,8 +44,8 @@ while 1:
     else:
         break
 key = input('输入通用密码\n')
-print('请牢记密码，安装程序3秒后开始')
-time.sleep(3)
+print('请牢记密码，安装程序5秒后开始')
+time.sleep(5)
 os.system('yum -y update')
 print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
