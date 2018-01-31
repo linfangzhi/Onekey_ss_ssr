@@ -175,13 +175,21 @@ install_config() {
 reboot_os() {
     clear
     echo -e "${green}Info:${plain} .Everything is done!"
-    read -p "Do you want to restart system? [y/n]" is_reboot
-    if [[ ${is_reboot} == "y" || ${is_reboot} == "Y" ]]; then
-        reboot
-    else
-        echo -e "${green}Info:${plain} Reboot has been canceled..."
-        exit 0
-    fi
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    echo "@"
+    echo "@      全部搞定! 5秒后自动重启，一切就OK了"
+    echo "@"
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    echo "@"
+    sleep 5
+    echo "@"
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    echo "@"
+    echo "@      开始重启 ，祝你好运
+    echo "@"
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    sleep 3
+    reboot
 }
 
 install_bbr() {
