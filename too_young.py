@@ -46,7 +46,7 @@ while 1:
 key = input('输入通用密码\n')
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
-os.system('yum -y update')
+#os.system('yum -y update')
 print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
 os.system('yum -y install wget')
