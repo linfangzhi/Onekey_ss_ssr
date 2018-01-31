@@ -185,7 +185,7 @@ reboot_os() {
     echo "@"
     echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
     echo "@"
-    echo "@      开始重启 ，祝你好运
+    echo "@      开始重启 ，祝你好运"
     echo "@"
     echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
     sleep 3
@@ -237,15 +237,4 @@ install_bbr() {
 
 
 clear
-echo "---------- System Information ----------"
-echo " OS      : $opsy"
-echo " Arch    : $arch ($lbit Bit)"
-echo " Kernel  : $kern"
-echo "----------------------------------------"
-echo " Auto install latest kernel for TCP BBR"
-echo
-echo " URL: https://teddysun.com/489.html"
-echo "----------------------------------------"
-echo
-
-install_bbr 2>&1 | tee ${cur_dir}/install_bbr.log
+install_bbr 2>&1
