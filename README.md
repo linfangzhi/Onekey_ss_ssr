@@ -49,6 +49,8 @@
 |ShadowSocks   (python版)|
 |ShadowSocksR  (python版)|
 |Google BBR 加速|
+|魔改 BBR 加速|
+|锐速（加速可以自己选择）|
 
 
 ### 注意事项:
