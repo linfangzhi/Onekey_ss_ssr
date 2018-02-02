@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
@@ -165,23 +164,10 @@ install_config() {
 }
 
 reboot_os() {
-    clear
-    echo -e "${green}Info:${plain} .Everything is done!"
-    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    echo "@"
-    echo "@      全部搞定! 5秒后自动重启，一切就OK了"
-    echo "@"
-    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    echo "@"
+    echo "完成"
     sleep 5
-    echo "@"
-    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    echo "@"
-    echo "@      开始重启 ，祝你好运"
-    echo "@"
-    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    sleep 3
     reboot
+
 }
 
 install_bbr() {
@@ -193,6 +179,7 @@ install_bbr() {
     fi
     check_kernel_version
     if [ $? -eq 0 ]; then
+        echo
         echo -e "${green}Info:${plain} Your kernel version is greater than 4.9, directly setting TCP BBR..."
         sysctl_config
         echo -e "${green}Info:${plain} Setting TCP BBR completed..."
@@ -229,4 +216,6 @@ install_bbr() {
 
 
 clear
+
+
 install_bbr 2>&1 | tee ${cur_dir}/install_bbr.log
