@@ -143,7 +143,7 @@ startlotserver(){
 	memory=`cat /proc/meminfo |grep 'MemTotal' |awk -F : '{print $2}' |sed 's/^[ \t]*//g' | awk  '{print $1}'`
 	memory1=`expr ${memory} / 1024`
 	memory2=`expr ${memory1} \* 8`
-	cpucore=`cat /proc/cpuinfo | grep “processor” | wc -l`
+	cpucore=`cat /proc/cpuinfo | grep "processor" | wc -l`
 	ping1=`ping 140.205.230.3  -s 1000 -c 10 | awk -F"[= ]*"   '/from/{sum+=$(NF-1);}END{print sum/10;}' | awk -F "." '{print $1}'`
 	sed -i '/initialCwndWan/d' /appex/etc/config
 	sed -i '/l2wQLimit/d' /appex/etc/config

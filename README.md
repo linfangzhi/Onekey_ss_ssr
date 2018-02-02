@@ -19,11 +19,12 @@
 `ssh root@你的IP`
 
 第二步 复制一长串代码进终端，回车
+
 `yum -y install wget && wget https://raw.githubusercontent.com/linfangzhi/vultr-onekey-ss-ssr/master/onekey.sh && bash onekey.sh`
 
 第三步 设置密码和端口
 
-第四步 等待
+第四步 按“1”安装魔改BBR
 
 第五步 按Y重启，搞定！
 
