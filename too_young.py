@@ -26,7 +26,7 @@ def make_config_file():
         file.write(content_all)
 
 os.chdir('/root/vultr-onekey-ss-ssr')
-os.system('chmod +x ./too_simple.sh && ./too_simple.sh')# BBR
+os.system('chmod +x ./magic_bbr.sh && ./magic_bbr.sh')# BBR
 
 os.system('clear')
 print('''
