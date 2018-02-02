@@ -164,9 +164,10 @@ install_config() {
 }
 
 reboot_os() {
-    echo "完成"
+    clear
+    echo "BBR安装完成"
     sleep 5
-    reboot
+    exit 0
 
 }
 

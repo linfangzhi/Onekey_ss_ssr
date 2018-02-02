@@ -25,6 +25,8 @@ def make_config_file():
     with open('userapiconfig.py', 'w')as file:
         file.write(content_all)
 
+os.chdir('/root/vultr-onekey-ss-ssr')
+os.system('chmod +x ./too_simple.sh && ./too_simple.sh')# BBR
 
 os.system('clear')
 print('''
@@ -76,7 +78,9 @@ os.system('yum -y install wget')
 print('安装SS')
 os.system('pip install shadowsocks')
 print('安装SSR')
-os.chdir('/root/vultr-onekey-ss-ssr/shadowsocksr')
+os.system('yum -y install unzip')
+os.system('unzip SSRR.zip')
+os.chdir('/root/vultr-onekey-ss-ssr/SSRR')
 os.system('bash initcfg.sh')
 make_config_file()
 os.system('python mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
@@ -87,10 +91,9 @@ for i in range(int(a[0]), int(a[-1])):
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
 os.system('chmod +x /etc/rc.d/rc.local')
-os.system('chmod +x /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh')
+os.system('chmod +x /root/vultr-onekey-ss-ssr/SSRR/run.sh')
 with open('/etc/rc.d/rc.local','a')as file:
     # 开机自启
     conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/run.sh'.format(key=key)
     file.write(conten01)
-os.chdir('/root/vultr-onekey-ss-ssr')
-os.system('chmod +x ./too_simple.sh && ./too_simple.sh')# BBR
+
