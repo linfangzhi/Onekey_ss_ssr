@@ -1,6 +1,31 @@
 import os
 import socket
 import time
+
+
+
+def get_host_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+
+    return ip
+
+
+def make_config_file():
+    content1 = 'API_INTERFACE = \'mudbjson\'\nUPDATE_TIME= 6\n'
+    content2 = 'SERVER_PUB_ADDR = \'{}\''.format(get_host_ip())
+    content3 = '''\nMUDB_FILE = 'mudb.json'\nMYSQL_CONFIG = 'usermysql.json'\nMUAPI_CONFIG = 'usermuapi.json'
+    '''
+    content_all = content1 + content2 + content3
+    print('your ip is:{}'.format(get_host_ip()))
+    with open('userapiconfig.py', 'w')as file:
+        file.write(content_all)
+
+
 os.system('clear')
 print('''
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -46,40 +71,13 @@ while 1:
 key = input('输入通用密码\n')
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
-#os.system('yum -y update')
-#print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
 os.system('yum -y install wget')
 print('安装SS')
 os.system('pip install shadowsocks')
 print('安装SSR')
 os.chdir('/root/vultr-onekey-ss-ssr/shadowsocksr')
-# 这里要注意改变工作路径
 os.system('bash initcfg.sh')
-
-
-def get_host_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-    finally:
-        s.close()
-
-    return ip
-
-
-def make_config_file():
-    content1 = 'API_INTERFACE = \'mudbjson\'\nUPDATE_TIME= 6\n'
-    content2 = 'SERVER_PUB_ADDR = \'{}\''.format(get_host_ip())
-    content3 = '''\nMUDB_FILE = 'mudb.json'\nMYSQL_CONFIG = 'usermysql.json'\nMUAPI_CONFIG = 'usermuapi.json'
-    '''
-    content_all = content1 + content2 + content3
-    print('your ip is:{}'.format(get_host_ip()))
-    with open('userapiconfig.py', 'w')as file:
-        file.write(content_all)
-
-
 make_config_file()
 os.system('python ./mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
@@ -92,7 +90,7 @@ os.system('chmod +x /etc/rc.d/rc.local')
 os.system('chmod +x /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh')
 with open('/etc/rc.d/rc.local','a')as file:
     # 开机自启
-    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/shadowsocksr/vultr-onekey-ss-ssr/run.sh'.format(key=key)
+    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/run.sh'.format(key=key)
     file.write(conten01)
 os.chdir('/root/vultr-onekey-ss-ssr')
 os.system('chmod +x ./too_simple.sh && ./too_simple.sh')# BBR
