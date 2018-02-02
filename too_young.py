@@ -79,7 +79,7 @@ print('安装SSR')
 os.chdir('/root/vultr-onekey-ss-ssr/shadowsocksr')
 os.system('bash initcfg.sh')
 make_config_file()
-os.system('python ./mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
+os.system('python mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
 os.system('firewall-cmd --zone=public --add-port=8842/tcp --permanent')
 for i in range(int(a[0]), int(a[-1])):
