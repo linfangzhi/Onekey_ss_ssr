@@ -47,16 +47,13 @@ key = input('输入通用密码\n')
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
 #os.system('yum -y update')
-print('install git，pip，wget')
+#print('install git，pip，wget')
 os.system('yum -y install python-setuptools && easy_install pip')
 os.system('yum -y install wget')
 print('安装SS')
 os.system('pip install shadowsocks')
 print('安装SSR')
-os.chdir('/root')
-# 这里要注意改变工作路径
-os.system('git clone -b manyuser https://github.com/Ssrbackup/shadowsocksr.git')
-os.chdir('/root/shadowsocksr')
+os.chdir('/root/vultr-onekey-ss-ssr/shadowsocksr')
 # 这里要注意改变工作路径
 os.system('bash initcfg.sh')
 
@@ -92,10 +89,10 @@ for i in range(int(a[0]), int(a[-1])):
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
 os.system('chmod +x /etc/rc.d/rc.local')
-os.system('chmod +x /root/shadowsocksr/run.sh')
+os.system('chmod +x /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh')
 with open('/etc/rc.d/rc.local','a')as file:
     # 开机自启
-    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/shadowsocksr/run.sh'.format(key=key)
+    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/shadowsocksr/vultr-onekey-ss-ssr/run.sh'.format(key=key)
     file.write(conten01)
 os.chdir('/root/vultr-onekey-ss-ssr')
-os.system('chmod +x ./too_simple.sh && ./too_simple.sh')
+os.system('chmod +x ./too_simple.sh && ./too_simple.sh')# BBR

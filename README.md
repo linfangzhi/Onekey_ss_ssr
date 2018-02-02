@@ -18,20 +18,14 @@
 
 `ssh root@你的IP`
 
-第二步 安装git
+第二步 复制一长串代码进终端，回车
+`yum -y install wget && wget http://t.cn/R8iRgzW && bash onekey.sh`
 
-`yum -y install git`
+第三步 设置密码和端口
 
+第四步 等待
 
-第三步 复制一长串代码进终端，回车
-
-`git clone https://github.com/linfangzhi/vultr-onekey-ss-ssr && cd vultr-onekey-ss-ssr && python onekey.py`
-
-第四步 设置密码和端口
-
-第五步 等待
-
-第六步 按Y重启，搞定！
+第五步 按Y重启，搞定！
 
 ## 一些说明与参数
 
