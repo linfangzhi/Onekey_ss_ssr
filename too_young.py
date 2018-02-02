@@ -27,7 +27,7 @@ def make_config_file():
 
 os.chdir('/root/vultr-onekey-ss-ssr')
 os.system('chmod +x ./magic_bbr.sh && ./magic_bbr.sh')# BBR
-
+time.sleep(3)
 os.system('clear')
 print('''
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -70,7 +70,13 @@ while 1:
         print('端口输入错误！')
     else:
         break
-key = input('输入通用密码\n')
+while 1:
+    key = input('输入通用密码\n')
+    if key:
+        break
+    else:
+        continue
+
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
 os.system('yum -y install python-setuptools && easy_install pip')
