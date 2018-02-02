@@ -503,7 +503,6 @@ check_sys_Lotsever(){
 }
 
 check_status(){
- clear
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
 	if [[ ${kernel_version} = "4.11.8" ]]; then
 		kernel_status="BBR"
