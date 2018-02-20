@@ -3,7 +3,6 @@ import socket
 import time
 
 
-
 def get_host_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -64,7 +63,7 @@ print('''
 while 1:
     a = input('输入端口范围port\n')
     a = a.split()
-    if int(a[0])>int(a[-1]):
+    if int(a[0]) > int(a[-1]):
         print('端口输入错误！')
     else:
         break
@@ -80,10 +79,10 @@ while 1:
         break
     else:
         continue
-if speed_lit=='1':
-    set_speed=' -s 1024 -S 1024'
+if speed_lit == '1':
+    set_speed = ' -s 1024 -S 1024'
 else:
-    speed_lit=''
+    set_speed = ''
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
 os.system('yum -y install python-setuptools && easy_install pip')
@@ -101,18 +100,18 @@ os.system('python mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
 os.system('firewall-cmd --zone=public --add-port=8842/tcp --permanent')
 for i in range(int(a[0]), int(a[-1])):
-    os.system('python mujson_mgr.py -a -p {port} -k {key} {set_speed}'.format(port=i,key=key,set_speed=set_speed))
+    os.system('python mujson_mgr.py -a -p {port} -k {key} {set_speed}'.format(port=i, key=key, set_speed=set_speed))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
 os.system('chmod +x /etc/rc.d/rc.local')
 os.system('chmod +x /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh')
-with open('/etc/rc.d/rc.local','a')as file:
+with open('/etc/rc.d/rc.local', 'a')as file:
     # 开机自启
-    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/shadowsocksr/run.sh'.format(key=key)
+    conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/shadowsocksr/run.sh'.format(
+        key=key)
     file.write(conten01)
 os.system('clear')
 os.system('chmod +x /etc/rc.d/rc.local')
 os.chdir('/root/vultr-onekey-ss-ssr')
-os.system('chmod +x ./magic_bbr.sh && ./magic_bbr.sh')# BBR
+os.system('chmod +x ./magic_bbr.sh && ./magic_bbr.sh')  # BBR
 print('完成')
-
