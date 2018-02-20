@@ -80,7 +80,7 @@ while 1:
     else:
         continue
 if speed_lit == '1':
-    set_speed = ' -s 1024 -S 1024'
+    set_speed = ' -s 1024 -S 1100'
 else:
     set_speed = ''
 print('请牢记密码，安装程序5秒后开始')
@@ -110,6 +110,7 @@ with open('/etc/rc.d/rc.local', 'a')as file:
     conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/shadowsocksr/run.sh'.format(
         key=key)
     file.write(conten01)
+os.system('cp ./magic_bbr.sh ..')
 os.system('clear')
 os.system('chmod +x /etc/rc.d/rc.local')
 os.chdir('/root/vultr-onekey-ss-ssr')
