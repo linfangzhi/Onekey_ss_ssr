@@ -74,7 +74,16 @@ while 1:
         break
     else:
         continue
-
+while 1:
+    speed_lit = input('是否限速，0or1\n')
+    if speed_lit:
+        break
+    else:
+        continue
+if speed_lit=='1':
+    set_speed=' -s 1024 -S 1024'
+else:
+    speed_lit=''
 print('请牢记密码，安装程序5秒后开始')
 time.sleep(5)
 os.system('yum -y install python-setuptools && easy_install pip')
@@ -92,7 +101,7 @@ os.system('python mujson_mgr.py -a -p 8848 -k {key}'.format(key=key))
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
 os.system('firewall-cmd --zone=public --add-port=8842/tcp --permanent')
 for i in range(int(a[0]), int(a[-1])):
-    os.system('python mujson_mgr.py -a -p {port} -k {key}'.format(port=i,key=key))
+    os.system('python mujson_mgr.py -a -p {port} -k {key} {set_speed}'.format(port=i,key=key,set_speed=set_speed))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
 os.system('firewall-cmd --reload')
 os.system('chmod +x /etc/rc.d/rc.local')
