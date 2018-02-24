@@ -110,9 +110,10 @@ with open('/etc/rc.d/rc.local', 'a')as file:
     conten01 = 'ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n/root/vultr-onekey-ss-ssr/shadowsocksr/run.sh'.format(
         key=key)
     file.write(conten01)
+os.system('chmod +x ./magic_bbr.sh')
 os.system('cp ./magic_bbr.sh ..')
 os.system('clear')
 os.system('chmod +x /etc/rc.d/rc.local')
 os.chdir('/root/vultr-onekey-ss-ssr')
-os.system('chmod +x ./magic_bbr.sh && ./magic_bbr.sh')  # BBR
+os.system('chmod +x ./bbr.sh && ./bbr.sh')  # BBR
 print('完成')
