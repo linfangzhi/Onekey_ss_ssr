@@ -315,9 +315,11 @@ case "$num" in
 	;;
 	4)
 	startbbrmod
+	optimizing_system
 	;;
 	5)
 	startlotserver
+	optimizing_system
 	;;
 	6)
 	remove_all
