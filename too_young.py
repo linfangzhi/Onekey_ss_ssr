@@ -102,7 +102,8 @@ os.system('python mujson_mgr.py -a -p 8080 -o http_simple -k {key}'.format(key=k
 os.system('firewall-cmd --zone=public --add-port=80/tcp --permanent')
 os.system('firewall-cmd --zone=public --add-port=8080/tcp --permanent')
 os.system('firewall-cmd --zone=public --add-port=8848/tcp --permanent')
-os.system('firewall-cmd --zone=public --add-port=8842/udp --permanent')
+os.system('firewall-cmd --zone=public --add-port=8848/udp --permanent')
+os.system('firewall-cmd --zone=public --add-port=8842/tcp --permanent')
 for i in range(int(a[0]), int(a[-1])):
     os.system('python mujson_mgr.py -a -p {port} -k {key} {set_speed}'.format(port=i, key=key, set_speed=set_speed))
     os.system('firewall-cmd --zone=public --add-port={}/tcp --permanent'.format(i))
