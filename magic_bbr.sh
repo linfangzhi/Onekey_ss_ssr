@@ -5,12 +5,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 6+,Debian7+,Ubuntu12+
 #	Description: BBR+BBR魔改版+Lotserver
-#	Version: 1.0.6
+#	Version: 1.1.7
 #	Author: 千影
 #	Blog: https://www.94ish.me/
 #=================================================
 
-sh_ver="1.0.6"
+sh_ver="1.1.7"
 github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -32,7 +32,7 @@ installbbr(){
 		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
 		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
 		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
-
+	
 		dpkg -i linux-headers-${kernel_version}-all.deb
 		dpkg -i linux-headers-${kernel_version}.deb
 		dpkg -i linux-image-${kernel_version}.deb
@@ -64,7 +64,7 @@ installlot(){
 		wget -N --no-check-certificate http://${github}/lotserver/${release}/${bit}/linux-headers-${kernel_version}-all.deb
 		wget -N --no-check-certificate http://${github}/lotserver/${release}/${bit}/linux-headers-${kernel_version}.deb
 		wget -N --no-check-certificate http://${github}/lotserver/${release}/${bit}/linux-image-${kernel_version}.deb
-
+	
 		dpkg -i linux-headers-${kernel_version}-all.deb
 		dpkg -i linux-headers-${kernel_version}.deb
 		dpkg -i linux-image-${kernel_version}.deb
@@ -72,7 +72,7 @@ installlot(){
 	elif [[ "${release}" == "debian" ]]; then
 		mkdir bbr && cd bbr
 		wget -N --no-check-certificate http://${github}/lotserver/${release}/${bit}/linux-image-${kernel_version}.deb
-
+	
 		dpkg -i linux-image-${kernel_version}.deb
 		cd .. && rm -rf bbr
 	fi
@@ -126,12 +126,50 @@ startbbrmod(){
 		cp -rf ./tcp_tsunami.ko /lib/modules/$(uname -r)/kernel/net/ipv4
 		depmod -a
 	fi
-
+	
 
 	echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 	echo "net.ipv4.tcp_congestion_control=tsunami" >> /etc/sysctl.conf
 	sysctl -p
     cd .. && rm -rf bbrmod
+	echo -e "${Info}魔改版BBR启动成功！"
+}
+
+#编译并启用BBR魔改
+startbbrmod_nanqinlang(){
+	remove_all
+	if [[ "${release}" == "centos" ]]; then
+		yum install -y make gcc
+		mkdir bbrmod && cd bbrmod
+		wget -N --no-check-certificate https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/bbr/centos/tcp_nanqinlang.c
+		echo "obj-m := tcp_nanqinlang.o" > Makefile
+		make -C /lib/modules/$(uname -r)/build M=`pwd` modules CC=/usr/bin/gcc
+		chmod +x ./tcp_nanqinlang.ko
+		cp -rf ./tcp_nanqinlang.ko /lib/modules/$(uname -r)/kernel/net/ipv4
+		insmod tcp_nanqinlang.ko
+		depmod -a
+	else
+		apt-get update
+		if [[ "${release}" == "ubuntu" && "${version}" = "14" ]]; then
+			apt-get -y install build-essential
+			apt-get -y install software-properties-common
+			add-apt-repository ppa:ubuntu-toolchain-r/test -y
+			apt-get update
+		fi
+		apt-get -y install make gcc-4.9
+		mkdir bbrmod && cd bbrmod
+		wget -N --no-check-certificate https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/bbr/tcp_nanqinlang.c
+		echo "obj-m := tcp_nanqinlang.o" > Makefile
+		make -C /lib/modules/$(uname -r)/build M=`pwd` modules CC=/usr/bin/gcc-4.9
+		install tcp_nanqinlang.ko /lib/modules/$(uname -r)/kernel
+		cp -rf ./tcp_nanqinlang.ko /lib/modules/$(uname -r)/kernel/net/ipv4
+		depmod -a
+	fi
+	
+
+	echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+	echo "net.ipv4.tcp_congestion_control=nanqinlang" >> /etc/sysctl.conf
+	sysctl -p
 	echo -e "${Info}魔改版BBR启动成功！"
 }
 
@@ -143,43 +181,24 @@ startlotserver(){
 	memory=`cat /proc/meminfo |grep 'MemTotal' |awk -F : '{print $2}' |sed 's/^[ \t]*//g' | awk  '{print $1}'`
 	memory1=`expr ${memory} / 1024`
 	memory2=`expr ${memory1} \* 8`
-	cpucore=`cat /proc/cpuinfo | grep "processor" | wc -l`
-	ping1=`ping 140.205.230.3  -s 1000 -c 10 | awk -F"[= ]*"   '/from/{sum+=$(NF-1);}END{print sum/10;}' | awk -F "." '{print $1}'`
-	sed -i '/initialCwndWan/d' /appex/etc/config
+	cpucore=`cat /proc/cpuinfo | grep “processor” | wc -l`
 	sed -i '/l2wQLimit/d' /appex/etc/config
 	sed -i '/w2lQLimit/d' /appex/etc/config
-	sed -i '/SmBurstMS/d' /appex/etc/config
 	sed -i '/engineNum/d' /appex/etc/config
-	sed -i '/shortRttMS/d' /appex/etc/config
-	initialCwndWan=`expr ${ping1} / 3`
-	SmBurstMS=`expr ${ping1} / 9`
 	l2wQLimit="${memory1} ${memory2}"
-	echo -e "initialCwndWan=\"${initialCwndWan}\"
-l2wQLimit=\"${l2wQLimit}\"
+	echo -e "l2wQLimit=\"${l2wQLimit}\"
 w2lQLimit=\"${l2wQLimit}\"
-SmBurstMS=\"${SmBurstMS}\"
-engineNum=\"${cpucore}\"
-shortRttMS=\"${initialCwndWan}\"">>/appex/etc/config
+engineNum=\"${cpucore}\"">>/appex/etc/config
 	bash /appex/bin/serverSpeeder.sh restart
 	start_menu
 }
 
 #卸载全部加速
 remove_all(){
+	rm -rf bbrmod
 	sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
     sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-	if [[ -e /appex/bin/serverSpeeder.sh ]]; then
-		wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && chmod +x appex.sh && bash appex.sh uninstall
-		rm -f appex.sh
-	fi
-	clear
-	echo -e "${Info}:清除加速完成。"
-	sleep 1s
-}
-
-#优化系统配置
-optimizing_system(){
-	sed -i '/fs.file-max/d' /etc/sysctl.conf
+    sed -i '/fs.file-max/d' /etc/sysctl.conf
 	sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
 	sed -i '/net.core.wmem_max/d' /etc/sysctl.conf
 	sed -i '/net.core.rmem_default/d' /etc/sysctl.conf
@@ -198,51 +217,68 @@ optimizing_system(){
 	sed -i '/net.ipv4.tcp_wmem/d' /etc/sysctl.conf
 	sed -i '/net.ipv4.tcp_mtu_probing/d' /etc/sysctl.conf
 	sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
-	echo "# max open files
-fs.file-max = 1024000
-# max read buffer
-net.core.rmem_max = 67108864
-# max write buffer
-net.core.wmem_max = 67108864
-# default read buffer
-net.core.rmem_default = 65536
-# default write buffer
-net.core.wmem_default = 65536
-# max processor input queue
-net.core.netdev_max_backlog = 4096
-# max backlog
-net.core.somaxconn = 4096
+	sed -i '/fs.inotify.max_user_instances/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_syncookies/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_fin_timeout/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_tw_reuse/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_syn_backlog/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.ip_local_port_range/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_tw_buckets/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.route.gc_timeout/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_synack_retries/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_syn_retries/d' /etc/sysctl.conf
+	sed -i '/net.core.somaxconn/d' /etc/sysctl.conf
+	sed -i '/net.core.netdev_max_backlog/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_timestamps/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_orphans/d' /etc/sysctl.conf
+	if [[ -e /appex/bin/serverSpeeder.sh ]]; then
+		wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && chmod +x appex.sh && bash appex.sh uninstall
+		rm -f appex.sh
+	fi
+	clear
+	echo -e "${Info}:清除加速完成。"
+	sleep 1s
+}
 
-# resist SYN flood attacks
+#优化系统配置
+optimizing_system(){
+	sed -i '/fs.file-max/d' /etc/sysctl.conf
+	sed -i '/fs.inotify.max_user_instances/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_syncookies/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_fin_timeout/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_tw_reuse/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_syn_backlog/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.ip_local_port_range/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_tw_buckets/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.route.gc_timeout/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_synack_retries/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_syn_retries/d' /etc/sysctl.conf
+	sed -i '/net.core.somaxconn/d' /etc/sysctl.conf
+	sed -i '/net.core.netdev_max_backlog/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_timestamps/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.tcp_max_orphans/d' /etc/sysctl.conf
+	sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
+	echo "fs.file-max = 1000000
+fs.inotify.max_user_instances = 8192
 net.ipv4.tcp_syncookies = 1
-# reuse timewait sockets when safe
-net.ipv4.tcp_tw_reuse = 1
-# turn off fast timewait sockets recycling
-net.ipv4.tcp_tw_recycle = 0
-# short FIN timeout
 net.ipv4.tcp_fin_timeout = 30
-# short keepalive time
-net.ipv4.tcp_keepalive_time = 1200
-# outbound port range
-net.ipv4.ip_local_port_range = 10000 65000
-# max SYN backlog
-net.ipv4.tcp_max_syn_backlog = 4096
-# max timewait sockets held by system simultaneously
-net.ipv4.tcp_max_tw_buckets = 5000
-# TCP receive buffer
-net.ipv4.tcp_rmem = 4096 87380 67108864
-# TCP write buffer
-net.ipv4.tcp_wmem = 4096 65536 67108864
-# turn on path MTU discovery
-net.ipv4.tcp_mtu_probing = 1
-
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.ip_local_port_range = 1024 65000
+net.ipv4.tcp_max_syn_backlog = 16384
+net.ipv4.tcp_max_tw_buckets = 6000
+net.ipv4.route.gc_timeout = 100
+net.ipv4.tcp_syn_retries = 1
+net.ipv4.tcp_synack_retries = 1
+net.core.somaxconn = 32768
+net.core.netdev_max_backlog = 32768
+net.ipv4.tcp_timestamps = 0
+net.ipv4.tcp_max_orphans = 32768
 # forward ipv4
 net.ipv4.ip_forward = 1">>/etc/sysctl.conf
 	sysctl -p
-	echo "*               soft    nofile           512000
-*               hard    nofile          1024000">/etc/security/limits.conf
-	echo "session required pam_limits.so">>/etc/pam.d/common-session
-	echo "ulimit -SHn 1024000">>/etc/profile
+	echo "*               soft    nofile           1000000
+*               hard    nofile          1000000">/etc/security/limits.conf
+	echo "ulimit -SHn 1000000">>/etc/profile
 	read -p "需要重启VPS后，才能生效系统优化配置，是否现在重启 ? [Y/n] :" yn
 	[ -z "${yn}" ] && yn="y"
 	if [[ $yn == [Yy] ]]; then
@@ -276,7 +312,7 @@ start_menu(){
 clear
 echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   -- 就是爱生活 | 94ish.me --
-
+  
  ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
 ————————————内核管理————————————
  ${Green_font_prefix}1.${Font_color_suffix} 安装 BBR/BBR魔改版内核
@@ -284,11 +320,12 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
 ————————————加速管理————————————
  ${Green_font_prefix}3.${Font_color_suffix} 使用BBR加速
  ${Green_font_prefix}4.${Font_color_suffix} 使用BBR魔改版加速
- ${Green_font_prefix}5.${Font_color_suffix} 使用Lotserver(锐速)加速
+ ${Green_font_prefix}5.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
+ ${Green_font_prefix}6.${Font_color_suffix} 使用Lotserver(锐速)加速
 ————————————杂项管理————————————
- ${Green_font_prefix}6.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}7.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}8.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}7.${Font_color_suffix} 卸载全部加速
+ ${Green_font_prefix}8.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}9.${Font_color_suffix} 退出脚本
 ————————————————————————————————" && echo
 
 	check_status
@@ -296,10 +333,10 @@ echo && echo -e " TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ve
 		echo -e " 当前状态: ${Green_font_prefix}未安装${Font_color_suffix} 加速内核 ${Red_font_prefix}请先安装内核${Font_color_suffix}"
 	else
 		echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} ${_font_prefix}${kernel_status}${Font_color_suffix} 加速内核 , ${Green_font_prefix}${run_status}${Font_color_suffix}"
-
+		
 	fi
 echo
-read -p " 请输入数字 [0-8]:" num
+read -p " 请输入数字 [0-9]:" num
 case "$num" in
 	0)
 	Update_Shell
@@ -315,19 +352,20 @@ case "$num" in
 	;;
 	4)
 	startbbrmod
-	optimizing_system
 	;;
 	5)
-	startlotserver
-	optimizing_system
+	startbbrmod_nanqinlang
 	;;
 	6)
-	remove_all
+	startlotserver
 	;;
 	7)
-	optimizing_system
+	remove_all
 	;;
 	8)
+	optimizing_system
+	;;
+	9)
 	exit 1
 	;;
 	*)
@@ -506,11 +544,11 @@ check_sys_Lotsever(){
 
 check_status(){
 	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	if [[ ${kernel_version} = "4.11.8" ]]; then
+	if [[ `echo ${kernel_version} | awk -F'.' '{print $1}'` == "4" ]] && [[ `echo ${kernel_version} | awk -F'.' '{print $2}'` -ge 9 ]]; then
 		kernel_status="BBR"
 	elif [[ ${kernel_version} = "3.10.0" || ${kernel_version} = "3.16.0" || ${kernel_version} = "3.2.0" || ${kernel_version} = "4.4.0" || ${kernel_version} = "3.13.0"  || ${kernel_version} = "2.6.32" ]]; then
 		kernel_status="Lotserver"
-	else
+	else 
 		kernel_status="noinstall"
 	fi
 	if [[ ${kernel_status} == "Lotserver" ]]; then
@@ -518,10 +556,10 @@ check_status(){
 			run_status=`bash /appex/bin/serverSpeeder.sh status | grep "ServerSpeeder" | awk  '{print $3}'`
 			if [[ ${run_status} = "running!" ]]; then
 				run_status="启动成功"
-			else
+			else 
 				run_status="启动失败"
 			fi
-		else
+		else 
 			run_status="未安装加速模块"
 		fi
 	elif [[ ${kernel_status} == "BBR" ]]; then
@@ -530,20 +568,26 @@ check_status(){
 			run_status=`lsmod | grep "bbr" | awk '{print $1}'`
 			if [[ ${run_status} == "tcp_bbr" ]]; then
 				run_status="BBR启动成功"
-			else
+			else 
 				run_status="BBR启动失败"
 			fi
 		elif [[ ${run_status} == "tsunami" ]]; then
 			run_status=`lsmod | grep "tsunami" | awk '{print $1}'`
 			if [[ ${run_status} == "tcp_tsunami" ]]; then
 				run_status="BBR魔改版启动成功"
-			else
+			else 
 				run_status="BBR魔改版启动失败"
 			fi
-		else
+		elif [[ ${run_status} == "nanqinlang" ]]; then
+			run_status=`lsmod | grep "nanqinlang" | awk '{print $1}'`
+			if [[ ${run_status} == "tcp_nanqinlang" ]]; then
+				run_status="暴力BBR魔改版启动成功"
+			else 
+				run_status="暴力BBR魔改版启动失败"
+			fi
+		else 
 			run_status="未安装加速模块"
 		fi
-
 	fi
 }
 
@@ -552,3 +596,4 @@ check_sys
 check_version
 [[ ${release} != "debian" ]] && [[ ${release} != "ubuntu" ]] && [[ ${release} != "centos" ]] && echo -e "${Error} 本脚本不支持当前系统 ${release} !" && exit 1
 start_menu
+
