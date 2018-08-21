@@ -215,7 +215,7 @@ def prossce():
             pass
 
 
-key = {'API-Key': 'GJ643MQYUM2GCOLVNUO33YV7OJ3OBLFLDOYQ'}
+key = {'API-Key': ''}
 while True:
     print('\n\n查询账户信息：1\n'
           '查询VPS状态：2\n'
