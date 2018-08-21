@@ -8,11 +8,12 @@
 
 ## 特点
 * 操作简单
-* vultr下没问题
-* 添加云免代码
-* 添加80和8080端口的http_simple混淆可以用作云免
+* vultr，Linode下没问题
+* 理论上适用于所有**CentOS7系统**服务器
+* 添加**云免流**配置
+* 添加80和8080端口的http_simple混淆可以用作**云免流**
 ## 注意事项
-* vultr请使用**CentOS7系统**，出了偏差不要怪我～～
+* vultr，Linode请使用**CentOS7系统**，出了偏差不要怪我～～
 * 请使用root用户登录
 ## 使用说明
 
@@ -24,11 +25,11 @@
 
 `yum -y install wget && wget https://raw.githubusercontent.com/linfangzhi/vultr-onekey-ss-ssr/master/onekey.sh && bash onekey.sh`
 
-第三步 设置密码和端口
+第三步 设置端口和密码，端口推荐输入“443 444”
 
-第四步 按“1”安装魔改BBR
+第四步 5秒等待之后，开始安装，去喝杯茶回来就好了，自动重启。
 
-第五步 按Y重启，搞定！
+第五步 自己测试一下
 
 ## 一些说明与参数
 
@@ -46,13 +47,21 @@
 混淆方式|tls1.2_ticket_auth
 端口|自定义
 密码|自定义
+### ShadowSocksR 默认云免流配置
+参数|值
+------|-------
+协议|auth_aes128_md5
+加密方式|aes-128-ctr
+混淆方式|http_simple
+端口|80和8080
+密码|自定义
 ### 将会安装
 |安装项目|
 |-----|
 |ShadowSocks   (python版)|
 |ShadowSocksR  (python版)|
 |Google BBR 加速|
-|魔改 BBR 加速|
+|暴力魔改 BBR 加速|
 |锐速（加速可以自己选择）|
 |80端口与8080端口免流|
 
@@ -61,6 +70,4 @@
 
 ### 注意事项:
 * 端口要用空格分开  如:233 666
-* 有时候需要重启一遍服务器才能完成加速安装
-* 请耐心等待，出现提示后，按Y重启，,完成安装。
 # 最后重申，只供学习用途！因为TensorFlow，GOlang，OpenCV等学习网站有时候比较难查询资料，所以为了方便学习。
