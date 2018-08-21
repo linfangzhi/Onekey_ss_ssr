@@ -48,6 +48,13 @@ installbbr(){
 	detele_kernel
 	BBR_grub
 	optimizing_system
+	clear
+	echo -e "*********************************************"
+	echo -e "大功告成！"
+	echo -e "自动重启，会出现connect closed，正常操作，不用慌"
+	echo -e "等服务器重启完就能用啦！大概需要59s   -1s"
+	echo -e "能用记得给个星星！给个star！"
+	echo -e "*********************************************"
 	reboot
 }
 
