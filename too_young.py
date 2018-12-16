@@ -113,7 +113,7 @@ os.system('chmod +x /etc/rc.d/rc.local')
 os.system('chmod +x /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh')
 with open('/etc/rc.d/rc.local', 'a')as file:
     # 开机自启
-    conten01 = '''ssserver -p 8842 -k {key} -m aes-256-cfb -d start\n
+    conten01 = '''ssserver -p 8842 -k {key} -m aes-256-ctr -d start\n
                 /root/vultr-onekey-ss-ssr/shadowsocksr/run.sh\n
                 /root/vultr-onekey-ss-ssr/magic_start.sh'''.format(key=key)
     file.write(conten01)
